@@ -1,0 +1,48 @@
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@emotion/styled": "^11.11.0",
+    "@expo/webpack-config": "^19.0.0",
+    "@mui/material": "^5.14.20",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.7",
+    "@tensorflow-models/coco-ssd": "^2.2.3",
+    "@tensorflow/tfjs": "^4.14.0",
+    "@tensorflow/tfjs-backend-cpu": "^4.14.0",
+    "@tensorflow/tfjs-backend-webgl": "^4.14.0",
+    "@tensorflow/tfjs-converter": "^4.14.0",
+    "@tensorflow/tfjs-core": "^4.14.0",
+    "@tensorflow/tfjs-react-native": "^1.0.0",
+    "expo": "~49.0.15",
+    "expo-asset": "^8.10.1",
+    "expo-camera": "^13.6.0",
+    "expo-gl": "^13.2.0",
+    "expo-gl-cpp": "^11.4.0",
+    "expo-status-bar": "~1.6.0",
+    "react": "18.2.0",
+    "react-dom": "^18.2.0",
+    "react-native": "0.72.6",
+    "react-native-animated-loader": "^1.0.0",
+    "react-native-canvas": "^0.1.39",
+    "react-native-fs": "^2.20.0",
+    "react-native-paper": "^5.11.4",
+    "react-native-web": "^0.19.9",
+    "react-native-webview": "^13.6.3",
+    "styled-components": "^6.1.1"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0"
+  },
+  "private": true
+}
