@@ -6,35 +6,21 @@ import { StatusBar } from 'expo-status-bar';
 import Canvas from 'react-native-canvas';
 import { Switch } from 'react-native-paper';
 import AnimatedLoader from "react-native-animated-loader";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { StyleSheet, Button, View, Text, Alert, Dimensions, LogBox, useColorScheme, } from 'react-native';
+import { cameraWithTensors } from '@tensorflow/tfjs-react-native';
+import { Camera } from 'expo-camera';
 // Importamos librerias necesarias para el modelo personalizado
 import { bundleResourceIO, decodeJpeg } from '@tensorflow/tfjs-react-native'
 import * as FileSystem from 'expo-file-system';
+import Tflite from 'tflite-react-native';
+const TensorCamera = cameraWithTensors(Camera);
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 const modelJSON = require('./assets/models/model.json')
 const modelWeights = [require('./assets/models/group1-shard1of2.bin'), require('./assets/models/group1-shard2of2.bin')];
-import Icon from 'react-native-vector-icons/FontAwesome';
-//! modelo secuencial de Keras con capas convolucionales y densas. 
-//! Modelo de clasificación binaria (por la capa de salida con 
-//!   activación sigmoid).
-
-import {
-  StyleSheet,
-  Button,
-  View,
-  Text,
-  Alert,
-  Dimensions,
-  LogBox,
-  useColorScheme,
-} from 'react-native';
 LogBox.ignoreAllLogs(true);
-import { cameraWithTensors } from '@tensorflow/tfjs-react-native';
-import { Camera } from 'expo-camera';
-const TensorCamera = cameraWithTensors(Camera);
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
-//el 80% y 60%
-const width = 1 * windowWidth;
-const height = 1 * windowHeight;
+let tflite = new Tflite();
 export default function App() {
   const [model, setModel] = useState()
   const [model2, setModel2] = useState()
@@ -60,15 +46,14 @@ export default function App() {
     const loadModel = async () => {
       try {
         // Carga del modelo diferida
-        const loadedModel = await tf.loadLayersModel(
-          bundleResourceIO(modelJSON, modelWeights)
-
-        )
+        // const loadedModel = await tf.loadLayersModel(
+        //   bundleResourceIO(modelJSON, modelWeights)
+        // )
         // carga del modelo ssd
-        const loadedModel2 = await cocoSsd.load();
-        setModel2(loadedModel2);
-        setModel(loadedModel);
-        console.log('2. Modelo cargado exitosamente');
+        // const loadedModel2 = await cocoSsd.load();
+        // setModel2(loadedModel2);
+        const loadedModel = await tflite.
+          console.log('2. Modelo cargado exitosamente');
       } catch (error) {
         console.error('Error loading model:', error);
       }
@@ -105,38 +90,39 @@ export default function App() {
     setIsDarkTheme(!isDarkTheme);
     console.log(isDarkTheme);
   };
-  function handleCameraStream(images, updatePreview, gl) {
+  function handleCameraStream(images) {
     const loop = async () => {
       try {
         const nextImageTensor = images.next().value
-        // console.log(model)
-        if (!model || !nextImageTensor || !model2) throw new Error("no model")
+        if (!model || !nextImageTensor) throw new Error("no model")
         // Redimensionar la imagen según las dimensiones esperadas por el modelo
         const resizedImage = tf.image.resizeBilinear(nextImageTensor, [100, 100]);
         const grayscaleImage = tf.image.rgbToGrayscale(resizedImage);
-
         const scalar = tf.scalar(255);
         const tensorScaled = grayscaleImage.div(scalar);
         const img = tf.reshape(tensorScaled, [1, 100, 100, 1]);
         console.log("VAMOA PREDECIR")
 
-
+        // const outputData = await model.run(img);
+        // console.log(outputData)
+        //! modelo KERAS capas convolucionales y densas
         // const predictions = model.predict(img);
         // console.log(predictions)
-        const predictionsArray = Array.from(await model.predict(img).data());
-        // Establecer un umbral para clasificar como clase positiva o negativa
-        const predictedProbability = predictionsArray[0] > 0.5 ? predictionsArray[0] : 1 - predictionsArray[0];
-        const threshold = 0.5;
-        const predictedClass = predictionsArray[0] > threshold ? 1 : 0;
+        // const predictionsArray = Array.from(await model.predict(img).data());
+        // // Establecer un umbral para clasificar como clase positiva o negativa
+        // const predictedProbability = predictionsArray[0] > 0.5 ? predictionsArray[0] : 1 - predictionsArray[0];
+        // const threshold = 0.5;
+        // const predictedClass = predictionsArray[0] > threshold ? 1 : 0;
 
-        console.log(`Detectado: ${predictedClass == 1 ? 'Mapache' : 'Tortuga'}`);
-        console.log(`Predicted probability: ${predictedProbability.toFixed(4) * 100} %`);
+        // console.log(`Detectado: ${predictedClass == 1 ? 'Mapache' : 'Tortuga'}`);
+        // console.log(`Predicted probability: ${predictedProbability.toFixed(4) * 100} %`);
 
 
-        console.log(predictionsArray)
-        // Liberar recursos después de cada predicción
-        tf.dispose([resizedImage, grayscaleImage, scalar, tensorScaled, img]);
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        // console.log(predictionsArray)
+        // // Liberar recursos después de cada predicción
+        // tf.dispose([resizedImage, grayscaleImage, scalar, tensorScaled, img]);
+        // await new Promise(resolve => setTimeout(resolve, 1500));
+        //! FIN modelo KERAS capas convolucionales y densas
         requestAnimationFrame(loop)
       } catch (err) {
         console.error("Error predicting:", err);
