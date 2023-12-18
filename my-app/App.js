@@ -7,20 +7,20 @@ import Canvas from 'react-native-canvas';
 import { Switch } from 'react-native-paper';
 import AnimatedLoader from "react-native-animated-loader";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { StyleSheet, Button, View, Text, Alert, Dimensions, LogBox, useColorScheme, } from 'react-native';
-import { cameraWithTensors } from '@tensorflow/tfjs-react-native';
+import { StyleSheet, Button, View, Text, Alert, Dimensions, LogBox, Image, ImageBackground, useColorScheme, } from 'react-native';
+import { cameraWithTensors, bundleResourceIO, decodeJpeg } from '@tensorflow/tfjs-react-native';
 import { Camera } from 'expo-camera';
-// Importamos librerias necesarias para el modelo personalizado
-import { bundleResourceIO, decodeJpeg } from '@tensorflow/tfjs-react-native'
-import * as FileSystem from 'expo-file-system';
-import Tflite from 'tflite-react-native';
 const TensorCamera = cameraWithTensors(Camera);
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-const modelJSON = require('./assets/models/model.json')
+
+// * MODELO KERAS BINARIO:
+const modelJSON = require('./assets/models/model1.json')
 const modelWeights = [require('./assets/models/group1-shard1of2.bin'), require('./assets/models/group1-shard2of2.bin')];
+// * MODELO KERAS BINARIO:
+// const modelJSON = require('./assets/models/model.json')
+// const modelWeights = [require('./assets/models/group1-shard1of3.bin'), require('./assets/models/group1-shard3of3.bin'), require('./assets/models/group1-shard2of3.bin')];
 LogBox.ignoreAllLogs(true);
-let tflite = new Tflite();
 export default function App() {
   const [model, setModel] = useState()
   const [model2, setModel2] = useState()
@@ -30,9 +30,11 @@ export default function App() {
   const textureDims = Platform.OS === 'ios'
     ? { height: 1920, width: 1080 }
     : { height: 1200, width: 1600 };
-  const [isCameraOn, setIsCameraOn] = useState(true);
-  const [stateloader, setStateloader] = useState("false");
-
+  const [isCameraOn, setIsCameraOn] = useState(false);
+  const [stateloader, setStateloader] = useState("true");
+  const cameraRef = useRef();
+  const animationRef = useRef();
+  const [isCameraReady, setIsCameraReady] = useState(false);
   useEffect(() => {
     const initializeTensorFlow = async () => {
       try {
@@ -46,14 +48,11 @@ export default function App() {
     const loadModel = async () => {
       try {
         // Carga del modelo diferida
-        // const loadedModel = await tf.loadLayersModel(
-        //   bundleResourceIO(modelJSON, modelWeights)
-        // )
-        // carga del modelo ssd
-        // const loadedModel2 = await cocoSsd.load();
-        // setModel2(loadedModel2);
-        const loadedModel = await tflite.
-          console.log('2. Modelo cargado exitosamente');
+        const loadedModel = await tf.loadLayersModel(
+          bundleResourceIO(modelJSON, modelWeights)
+        )
+        setModel(loadedModel);
+        console.log('2. Modelo cargado exitosamente');
       } catch (error) {
         console.error('Error loading model:', error);
       }
@@ -69,32 +68,35 @@ export default function App() {
       }
     };
     const initializeApp = async () => {
-      if (isCameraOn) {
-        setStateloader("Cargando Tensorflow...")
-        await initializeTensorFlow();
-        setStateloader("Cargando Modelo...")
+      setStateloader("Cargando Tensorflow...")
+      await initializeTensorFlow();
+      setStateloader("Cargando Modelo...")
 
-        await loadModel();
-        setStateloader("Iniciando camara...")
+      await loadModel();
+      setStateloader("Iniciando camara...")
 
-        await requestCameraPermission();
-
-      }
+      await requestCameraPermission();
+      setIsCameraReady(true);
     };
-    // if (!model) {
-    initializeApp();
-    // }
-  }, []);
 
+    initializeApp();
+  }, []);
+  useEffect(() => {
+    if (isCameraReady) {
+      handleCameraStream();
+    }
+  }, [isCameraReady]);
   const toggleTheme = () => {
     setIsDarkTheme(!isDarkTheme);
     console.log(isDarkTheme);
   };
   function handleCameraStream(images) {
+    console.log("Iniciando a Predecir")
     const loop = async () => {
       try {
+        if (!model) throw new Error("no model")
         const nextImageTensor = images.next().value
-        if (!model || !nextImageTensor) throw new Error("no model")
+        if (!nextImageTensor) throw new Error("no model")
         // Redimensionar la imagen según las dimensiones esperadas por el modelo
         const resizedImage = tf.image.resizeBilinear(nextImageTensor, [100, 100]);
         const grayscaleImage = tf.image.rgbToGrayscale(resizedImage);
@@ -106,8 +108,8 @@ export default function App() {
         // const outputData = await model.run(img);
         // console.log(outputData)
         //! modelo KERAS capas convolucionales y densas
-        // const predictions = model.predict(img);
-        // console.log(predictions)
+        const predictions = model.predict(img);
+        console.log(predictions)
         // const predictionsArray = Array.from(await model.predict(img).data());
         // // Establecer un umbral para clasificar como clase positiva o negativa
         // const predictedProbability = predictionsArray[0] > 0.5 ? predictionsArray[0] : 1 - predictionsArray[0];
@@ -125,7 +127,7 @@ export default function App() {
         //! FIN modelo KERAS capas convolucionales y densas
         requestAnimationFrame(loop)
       } catch (err) {
-        console.error("Error predicting:", err);
+        console.log("Error predicting:", err);
       }
       // model2
       //   .detect(nextImageTensor)
@@ -194,48 +196,23 @@ export default function App() {
       canvas.current = can
     }
   }
-  const initializeTensorFlow = async () => {
-    try {
-      await tf.ready();
-      tf.setBackend('rn-webgl');
-      console.log('1. TensorFlow is ready');
-    } catch (error) {
-      console.error('Error initializing TensorFlow:', error);
-    }
-  };
-  const loadModel = async () => {
-    try {
-      // Carga del modelo diferida
-      const loadedModel = await cocoSsd.load();
-      setModel(loadedModel);
-      console.log('2. Modelo cargado exitosamente');
-    } catch (error) {
-      console.error('Error loading model:', error);
-    }
-  };
-  const requestCameraPermission = async () => {
-    try {
-      console.log(isCameraOn)
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      console.log('3. Cámara lista');
-    } catch (error) {
-      console.error('Error requesting camera permission:', error);
-    }
-  };
-  const initializeApp = async () => {
-    if (isCameraOn) {
-      await initializeTensorFlow();
-      await loadModel();
-      await requestCameraPermission();
-    }
-  };
 
 
   const turncamera = async () => {
     setIsCameraOn(!isCameraOn)
     console.log("CAMARA = ", isCameraOn)
-    if (isCameraOn) {
-      initializeApp();
+    setIsCameraReady(true);
+    if (!isCameraOn) {
+      try {
+        // Carga del modelo diferida
+        const loadedModel = await tf.loadLayersModel(
+          bundleResourceIO(modelJSON, modelWeights)
+        )
+        setModel(loadedModel);
+        console.log('2. Modelo cargado exitosamente');
+      } catch (error) {
+        console.error('Error loading model:', error);
+      }
     }
 
   }
@@ -263,16 +240,15 @@ export default function App() {
           <Switch value={isDarkTheme} onValueChange={toggleTheme} />
         </View>
       </View>
-      {/* <Button
-        title={isCameraOn ? "Turn ON camera" : "Turn OFF camera"}
-        onPress={() => turncamera()}
-      /> */}
+      <Button
+        title={!isCameraOn ? "Turn ON camera" : "Turn OFF camera"}
+        onPress={turncamera}
+      />
 
-      <TensorCamera
-        // Standard Camera props
+      {isCameraOn && <TensorCamera
+        ref={cameraRef}
         style={styles.camera}
         type={Camera.Constants.Type.back}
-        // Tensor related props
         cameraTextureHeight={textureDims.height}
         cameraTextureWidth={textureDims.width}
         resizeHeight={200}
@@ -281,33 +257,40 @@ export default function App() {
         onReady={handleCameraStream}
         autorender={true}
         useCustomShadersToResize={false}
+      />}
+      <Image
+        style={styles.gifTortuga}
+        source={require('./assets/tortugaimg.gif')}
       />
-
-      <Canvas style={styles.canvas} ref={handleCanvas} />
-      <StatusBar style="auto" />
+      <Image
+        style={styles.gifMapache}
+        source={require('./assets/mapacheimg.gif')}
+      />
+      {/* <Canvas style={styles.canvas} ref={handleCanvas} /> */}
+      {/* <StatusBar style="auto" /> */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     paddingTop: '7%',
     // justifyContent: 'center',
-    height: '100%',
   },
   camera: {
     paddingTop: '25%',
     width: '95%',
     height: '95%',
     paddingBottom: '5%',
+    zIndex: 2,
   },
   canvas: {
     paddingTop: '25%',
-    position: 'absolute',
-    zIndex: 1000000,
+    position: 'fixed',
+    zIndex: 3,
     width: '95%',
     height: '95%',
     paddingBottom: '5%',
@@ -345,5 +328,22 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 26,
     marginTop: 10,
+  },
+  gifTortuga: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: '100%',
+    height: '35%',
+    zIndex: 20, // Ajusta el zIndex para que sea mayor que el de la cámara
+  },
+
+  gifMapache: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: '100%',
+    height: '40%',
+    zIndex: 25, // Ajusta el zIndex para que sea mayor que el de la cámara y el de gifTortuga
   },
 });

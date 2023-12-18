@@ -10,7 +10,7 @@ module.exports = {
         }),
     },
     resolver: {
-        assetExts: ['tflite', 'bin', 'txt', 'jpg', 'png', 'ttf'],
+        assetExts: ['tflite', 'bin', 'txt', 'gif', 'jpg', 'png', 'ttf'],
         sourceExts: ['js', 'json', 'ts', 'tsx', 'jsx'],
         blacklistRE: exclusionList([/platform_node/])
     },
