@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>tecnico.md</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+html,footer,header{
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Custom MD PDF CSS
+ */
+html,footer,header{
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+
+ }
+body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+<link rel="stylesheet" href="file:///r%3A/2.Travail/1.Enseignement/Cours/_1.Outils/2.Developpement/1.SCSS/main.css" type="text/css"><link rel="stylesheet" href="file:///d%3A/rdaros/Cours/_1.Outils/2.Developpement/1.SCSS/main.css" type="text/css">
+</head>
+
+<body>
+    <h1 id="especificaciones-tecnicas">ESPECIFICACIONES TECNICAS</h1>
+<h2 id="descripci%C3%B3n-del-proyecto">Descripción del Proyecto</h2>
+<p>La detección de objetos es una técnica de aprendizaje automático que identifica y localiza objetos dentro de imágenes. Este proyecto utiliza un modelo entrenado en el conjunto de datos COCO, un extenso conjunto de imágenes con más de 80 categorías de objetos.</p>
+<h1 id="uso-de-mobilenetv2-lite-en-la-detecci%C3%B3n-de-objetos">Uso de MobileNetV2 Lite en la Detección de Objetos</h1>
+<h2 id="introducci%C3%B3n-a-mobilenetv2-lite">Introducción a MobileNetV2 Lite</h2>
+<p>MobileNetV2 Lite es una versión optimizada y ligera de MobileNetV2, diseñada específicamente para dispositivos con recursos limitados, como smartphones y dispositivos IoT. Esta variante mantiene una precisión razonable mientras reduce significativamente el tamaño y los requisitos computacionales del modelo original.</p>
+<h2 id="caracter%C3%ADsticas-principales">Características Principales</h2>
+<ul>
+<li><strong>Eficiencia</strong>: MobileNetV2 Lite mantiene la arquitectura eficiente de MobileNetV2, pero con menos parámetros y operaciones, lo que resulta en una menor carga computacional.</li>
+<li><strong>Tamaño Reducido</strong>: El modelo está diseñado para tener un tamaño más pequeño en comparación con MobileNetV2 estándar, lo que lo hace ideal para aplicaciones móviles donde el espacio de almacenamiento es una consideración importante.</li>
+<li><strong>Rendimiento Aceptable</strong>: A pesar de su tamaño reducido, MobileNetV2 Lite ofrece un rendimiento decente en tareas de visión por computadora, incluida la detección de objetos.</li>
+</ul>
+<h2 id="integraci%C3%B3n-en-el-proyecto-de-detecci%C3%B3n-de-objetos">Integración en el Proyecto de Detección de Objetos</h2>
+<p>En el contexto del proyecto de detección de objetos en Android utilizando TensorFlow Lite, MobileNetV2 Lite se considera como una opción alternativa o complementaria a los modelos EfficientDet Lite.</p>
+<h3 id="ventajas-en-el-proyecto">Ventajas en el Proyecto</h3>
+<ul>
+<li><strong>Compatibilidad</strong>: TensorFlow Lite ofrece soporte directo para MobileNetV2 Lite, lo que facilita su integración en aplicaciones Android.</li>
+<li><strong>Rendimiento Adecuado</strong>: Para ciertas aplicaciones o escenarios donde la velocidad de inferencia es crítica y se puede sacrificar una pequeña cantidad de precisión, MobileNetV2 Lite puede ser una excelente elección debido a su rapidez y eficiencia.</li>
+</ul>
+<p>Utilizamos el modelo <code>Mobilenet V2</code> por su equilibrio entre tamaño y precisión.</p>
+<p><img src="/assets/image-122.png" alt="Alt text"></p>
+<h2 id="requisitos-del-sistema">Requisitos del Sistema</h2>
+<ul>
+<li>Android Studio versión 2021.1.1 o superior.</li>
+<li>Android SDK versión 31 o superior.</li>
+<li>Dispositivo Android con versión mínima SDK 24 (Android 7.0 - Nougat) y modo desarrollador activado.</li>
+</ul>
+<h2 id="configuraci%C3%B3n-y-ejecuci%C3%B3n">Configuración y Ejecución</h2>
+<p>Para el entrenamiento se utilizo el siguiente codigo:</p>
+<p><img src="/assets/image-1.png" alt="Alt text"></p>
+<p><a href="https://colab.research.google.com/drive/16wSUC2kF_f4yhhn6DqkHsjnNIEQIExQB?usp=sharing">Primer codigo implementado</a></p>
+<p>El ultimo codigo implementado se encuentra en el archivo:</p>
+<p><a href="/Training_Model_with_Tensorflow_Lite_Mobilenet_v2.ipynb">Training_Model_with_Tensorflow</a></p>
+<p>y para agregar la metadata para conocer las entradas y salidas se ha utilizado codigo que nos proporciona la documentacion oficial y que con ello pueda ser reconocido por visual studio para utilizar nuestro modelo:</p>
+<p><a href="https://colab.research.google.com/drive/1fLRrcDx1dwdgCtp1dBqVJQirII3GdzC6?usp=sharing">ADD METADATA DOCU</a></p>
+<h2 id="dependencias-necesarias">Dependencias Necesarias</h2>
+<p>Para integrar TensorFlow Lite en un proyecto Android, es esencial incluir las siguientes dependencias:</p>
+<h3 id="1-bibliotecas-de-tensorflow-lite">1. Bibliotecas de TensorFlow Lite</h3>
+<p>Estas son las bibliotecas principales que permiten cargar, ejecutar y trabajar con modelos de TensorFlow Lite en dispositivos Android.</p>
+<ul>
+<li><strong>TensorFlow Lite Core</strong>: Proporciona las funcionalidades básicas para cargar y ejecutar modelos TFLite en Android.</li>
+<li><strong>TensorFlow Lite GPU Delegate</strong>: Esta es una extensión específica que aprovecha la aceleración de GPU para ejecutar inferencias de manera más rápida, especialmente útil para modelos complejos o tareas intensivas.</li>
+</ul>
+<h3 id="2-dependencias-de-aceleraci%C3%B3n-de-gpu">2. Dependencias de Aceleración de GPU</h3>
+<p>La aceleración de GPU permite que las operaciones de inferencia del modelo se ejecuten utilizando el procesador gráfico del dispositivo, lo que puede resultar en tiempos de respuesta más rápidos y un rendimiento mejorado.</p>
+<ul>
+<li><strong>Librerías de Aceleración de GPU</strong>: Dependiendo del hardware y las capacidades del dispositivo, es posible que se requieran bibliotecas adicionales o drivers para habilitar y optimizar la aceleración de GPU con TensorFlow Lite.</li>
+</ul>
+<h2 id="integraci%C3%B3n-en-el-proyecto">Integración en el Proyecto</h2>
+<p>Para agregar estas dependencias al proyecto Android, generalmente se utilizan herramientas de gestión de dependencias como Gradle. Aquí hay un ejemplo básico de cómo se vería una configuración de dependencias en el archivo <code>build.gradle</code> del módulo de la aplicación:</p>
+<pre class="hljs"><code><div>dependencies {
+    <span class="hljs-comment">// Dependencias básicas de TensorFlow Lite</span>
+    implementation <span class="hljs-string">'org.tensorflow:tensorflow-lite:2.x.x'</span>
+
+    <span class="hljs-comment">// Dependencia para la aceleración de GPU (si es necesario)</span>
+    implementation <span class="hljs-string">'org.tensorflow:tensorflow-lite-gpu:2.x.x'</span>
+}
+</div></code></pre>
+<h2 id="inicializaci%C3%B3n-del-modelo">Inicialización del Modelo</h2>
+<p>El proceso de inicialización del modelo TensorFlow Lite se detalla paso a paso, desde la selección del modelo hasta la configuración de opciones y delegados de hardware.</p>
+<h2 id="preparaci%C3%B3n-de-datos">Preparación de Datos</h2>
+<p>Se recolectaron varias imagenes y se subieron a la plataforma roboflow ya con sus pesos ponderados utilizando labelImg.</p>
+<p><img src="/assets/image.png" alt="Alt text"></p>
+<p>Con labelImg se ha seleccionado el area de reconocimiento para el ObjectDetection necesario y que nuestro modelo pueda entrenar:</p>
+<p><img src="image.png" alt="Alt text"></p>
+<p>Para despues ser utilizado en nuestro codigo ya subido a roboflow.</p>
+<h2 id="ejecuci%C3%B3n-de-predicciones">Ejecución de Predicciones</h2>
+<p>Se realizaron las predicciones en android studio<br>
+<img src="/assets/image-2.png" alt="Alt text"></p>
+
+</body>
+
+</html>
