@@ -16,7 +16,7 @@ Aplicación Movil usando Kotlin y el lenguaje Python con uso de Android Studio p
 
 ### Pre-requisitos 📋
 
-Navegador
+Telefono Android
 
 ## Descripción: 📌
 
@@ -35,6 +35,10 @@ Este proyecto tiene como objetivo el reconocimiento de objetos utilizando Tensor
 - Detección precisa de múltiples objetos en tiempo real.
 - Integración fácil y rápida con otros sistemas y aplicaciones.
 - Alta eficiencia y rendimiento gracias al modelo ligero MobileNet V2.
+
+## Especificaciones tecnicas: 🛠️
+
+[Ir a Especificaciones Tecnicas](/tecnico.md)
 
 ## Cómo usar: 📦
 
